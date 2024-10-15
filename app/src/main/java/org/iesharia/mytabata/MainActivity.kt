@@ -19,9 +19,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MytabataTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                Scaffold( modifier = Modifier.fillMaxSize() ) { innerPadding ->
+                    Counter(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -31,9 +30,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Counter(modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "00",
         modifier = modifier
     )
 }
@@ -42,6 +41,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     MytabataTheme {
-        Greeting("Android")
+        Counter()
     }
 }
