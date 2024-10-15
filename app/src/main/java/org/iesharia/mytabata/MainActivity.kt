@@ -20,18 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import org.iesharia.mytabata.ui.theme.MytabataTheme
 
-var counterState : Boolean = false
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MytabataTheme {
-                Scaffold( modifier = Modifier.fillMaxSize() ) { innerPadding ->
-                    Counter(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Counter(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -40,37 +36,47 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Counter(modifier: Modifier = Modifier) {
-    var theCounter by remember { mutableStateOf(0L)}
+    var theCounter by remember { mutableStateOf(100L) }
+    var counterState by remember { mutableStateOf(false) }
 
-    Column {
-        Text(
-            text = theCounter.toString(),
-            modifier = modifier
-        )
+    val myCounter = remember {
+        object : CountDownTimer(theCounter * 1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                theCounter = millisUntilFinished / 1000
+            }
+
+            override fun onFinish() {
+                counterState = false
+            }
+        }
+    }
+
+    Column(modifier = modifier) {
+        Text(text = theCounter.toString())
+
         Button(onClick = {
             if (!counterState) {
-                object : CountDownTimer(100000, 1000) {
-
-                    override fun onTick(millisUntilFinished: Long) {
-                        theCounter = (millisUntilFinished / 1000)
-                    }
-
-                    override fun onFinish() {
-                        counterState = false
-                    }
-                }.start()
+                myCounter.start()
                 counterState = true
+            } else {
+                myCounter.cancel()
+                counterState = false
             }
-        })
-        {Text(text = "Pulsar")}
+        }) {
+            Text(text = if (counterState) {
+                "Detener"
+            } else {
+                "Iniciar"
+            })
+        }
     }
 }
 
-
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun GreetingPreview() {
+fun CounterPreview() {
     MytabataTheme {
         Counter()
     }
 }
+
