@@ -38,13 +38,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Counter(modifier: Modifier = Modifier) {
-    var theCounter by remember { mutableStateOf(99L) }
+    var theCounter by remember { mutableStateOf(100L) }
+    val miCounterDown = CounterDown(100, {newvalue -> theCounter = newvalue})
 
     Column(modifier = modifier) {
         Text(text = theCounter.toString())
 
         Button(onClick = {
-            val miCounterDown = CounterDown(99, theCounter)
             if (!miCounterDown.counterState) {
                 miCounterDown.myCounter.start()
                 miCounterDown.counterState = true
@@ -57,6 +57,7 @@ fun Counter(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
 @Preview
 @Composable
