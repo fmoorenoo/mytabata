@@ -32,6 +32,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TabataConfigScreen(modifier: Modifier = Modifier) {
     var sets by remember {mutableStateOf(6)}
+    var work by remember {mutableStateOf(60)}
+    var rest by remember {mutableStateOf(15)}
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -45,6 +47,30 @@ fun TabataConfigScreen(modifier: Modifier = Modifier) {
             }
             Text(text = sets.toString(), fontSize = 30.sp, modifier = Modifier.padding(40.dp, 40.dp))
             Button(onClick = { sets++ }) {
+                Text(text = "+", fontSize = 25.sp)
+            }
+        }
+
+
+        Text(text = "WORK", fontSize = 30.sp)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Button(onClick = { if (work > 14){work -= 15}}) {
+                Text(text = "-", fontSize = 25.sp)
+            }
+            Text(text = work.toString(), fontSize = 30.sp, modifier = Modifier.padding(40.dp, 40.dp))
+            Button(onClick = { work += 15 }) {
+                Text(text = "+", fontSize = 25.sp)
+            }
+        }
+
+
+        Text(text = "REST", fontSize = 30.sp)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Button(onClick = { if (rest > 14){rest -= 15}}) {
+                Text(text = "-", fontSize = 25.sp)
+            }
+            Text(text = rest.toString(), fontSize = 30.sp, modifier = Modifier.padding(40.dp, 40.dp))
+            Button(onClick = { rest += 15 }) {
                 Text(text = "+", fontSize = 25.sp)
             }
         }
