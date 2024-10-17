@@ -1,25 +1,17 @@
 package org.iesharia.mytabata
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.iesharia.mytabata.ui.theme.MytabataTheme
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MytabataTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Counter(
+                    TabataConfigScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -38,15 +30,32 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Counter(modifier: Modifier = Modifier) {
-    var theCounter by remember { mutableStateOf(0L) }
-    var miConterDown by remember{ mutableStateOf(CounterDown(99, {newvalue -> theCounter = newvalue}))}
+fun TabataConfigScreen(modifier: Modifier = Modifier) {
+    var sets by remember {mutableStateOf(6)}
 
-    Column {
-        Text(
-            text = theCounter.toString(),
-            modifier = modifier
-        )
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "SETS", fontSize = 30.sp)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Button(onClick = { if (sets > 0) sets-- }) {
+                Text(text = "-", fontSize = 25.sp)
+            }
+            Text(text = sets.toString(), fontSize = 30.sp, modifier = Modifier.padding(40.dp, 40.dp))
+            Button(onClick = { sets++ }) {
+                Text(text = "+", fontSize = 25.sp)
+            }
+        }
+
+        Button(onClick = { //////
+        }) {
+            Text(text = "Start", fontSize = 50.sp)
+        }
+    }
+}
+/*
         Button(onClick = {
             miConterDown.toggle()
         }) {
@@ -54,5 +63,4 @@ fun Counter(modifier: Modifier = Modifier) {
                 text = "Pulsar"
             )
         }
-    }
-}
+        */
