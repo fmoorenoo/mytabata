@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import org.iesharia.mytabata.ui.theme.MytabataTheme
 
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +28,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MytabataTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Counter(modifier = Modifier.padding(innerPadding))
+                    Counter(
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
@@ -38,32 +39,20 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Counter(modifier: Modifier = Modifier) {
-    var theCounter by remember { mutableStateOf(100L) }
-    val miCounterDown = CounterDown(100, {newvalue -> theCounter = newvalue})
+    var theCounter by remember { mutableStateOf(0L) }
+    var miConterDown by remember{ mutableStateOf(CounterDown(99, {newvalue -> theCounter = newvalue}))}
 
-    Column(modifier = modifier) {
-        Text(text = theCounter.toString())
-
+    Column {
+        Text(
+            text = theCounter.toString(),
+            modifier = modifier
+        )
         Button(onClick = {
-            if (!miCounterDown.counterState) {
-                miCounterDown.myCounter.start()
-                miCounterDown.counterState = true
-            } else {
-                miCounterDown.myCounter.cancel()
-                miCounterDown.counterState = false
-            }
+            miConterDown.toggle()
         }) {
-            Text(text = "Iniciar")
+            Text(
+                text = "Pulsar"
+            )
         }
     }
 }
-
-
-@Preview
-@Composable
-fun CounterPreview() {
-    MytabataTheme {
-        Counter()
-    }
-}
-
