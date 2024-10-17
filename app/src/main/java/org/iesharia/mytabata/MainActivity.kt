@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MytabataTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TabataConfigScreen(
+                    ConfigScreen(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -30,63 +30,73 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TabataConfigScreen(modifier: Modifier = Modifier) {
-    var sets by remember {mutableStateOf(6)}
-    var work by remember {mutableStateOf(60)}
-    var rest by remember {mutableStateOf(15)}
+fun ConfigScreen(modifier: Modifier = Modifier) {
+    var mostrar by remember { mutableStateOf(true) }
+    var sets by remember { mutableStateOf(6) }
+    var work by remember { mutableStateOf(60) }
+    var rest by remember { mutableStateOf(15) }
 
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "SETS", fontSize = 30.sp)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Button(onClick = { if (sets > 0) sets-- }) {
-                Text(text = "-", fontSize = 25.sp)
+        if (mostrar) {
+            Text(text = "SETS", fontSize = 30.sp)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { if (sets > 0) sets-- }) {
+                    Text(text = "-", fontSize = 25.sp)
+                }
+                Text(text = sets.toString(), fontSize = 30.sp, modifier = Modifier.padding(60.dp, 40.dp))
+                Button(onClick = { sets++ }) {
+                    Text(text = "+", fontSize = 25.sp)
+                }
             }
-            Text(text = sets.toString(), fontSize = 30.sp, modifier = Modifier.padding(40.dp, 40.dp))
-            Button(onClick = { sets++ }) {
-                Text(text = "+", fontSize = 25.sp)
-            }
-        }
 
-
-        Text(text = "WORK", fontSize = 30.sp)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Button(onClick = { if (work > 14){work -= 15}}) {
-                Text(text = "-", fontSize = 25.sp)
+            Text(text = "WORK", fontSize = 30.sp)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { if (work > 14) work -= 15 }) {
+                    Text(text = "-", fontSize = 25.sp)
+                }
+                Text(text = work.toString(), fontSize = 30.sp, modifier = Modifier.padding(60.dp, 40.dp))
+                Button(onClick = { work += 15 }) {
+                    Text(text = "+", fontSize = 25.sp)
+                }
             }
-            Text(text = work.toString(), fontSize = 30.sp, modifier = Modifier.padding(40.dp, 40.dp))
-            Button(onClick = { work += 15 }) {
-                Text(text = "+", fontSize = 25.sp)
-            }
-        }
 
-
-        Text(text = "REST", fontSize = 30.sp)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Button(onClick = { if (rest > 14){rest -= 15}}) {
-                Text(text = "-", fontSize = 25.sp)
+            Text(text = "REST", fontSize = 30.sp)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { if (rest > 14) rest -= 15 }) {
+                    Text(text = "-", fontSize = 25.sp)
+                }
+                Text(text = rest.toString(), fontSize = 30.sp, modifier = Modifier.padding(60.dp, 40.dp))
+                Button(onClick = { rest += 15 }) {
+                    Text(text = "+", fontSize = 25.sp)
+                }
             }
-            Text(text = rest.toString(), fontSize = 30.sp, modifier = Modifier.padding(40.dp, 40.dp))
-            Button(onClick = { rest += 15 }) {
-                Text(text = "+", fontSize = 25.sp)
-            }
-        }
 
-        Button(onClick = { //////
-        }) {
-            Text(text = "Start", fontSize = 50.sp)
+            Button(onClick = { mostrar = false }) {
+                Text(text = "Start", fontSize = 50.sp)
+            }
+        } else {
+            CounterScreen(
+                sets = sets,
+                work = work,
+                rest = rest
+            )
         }
     }
 }
-/*
-        Button(onClick = {
-            miConterDown.toggle()
-        }) {
-            Text(
-                text = "Pulsar"
-            )
-        }
-        */
+
+@Composable
+fun CounterScreen(sets: Int, work: Int, rest: Int) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Tabata iniciado", fontSize = 40.sp)
+
+
+    }
+}
