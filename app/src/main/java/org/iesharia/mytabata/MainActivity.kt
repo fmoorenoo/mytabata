@@ -83,9 +83,9 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
             }
         } else {
             CounterScreen(
-                sets = sets,
-                work = work,
-                rest = rest
+                sets = sets +1,
+                work = work +1,
+                rest = rest +1
             )
         }
     }
