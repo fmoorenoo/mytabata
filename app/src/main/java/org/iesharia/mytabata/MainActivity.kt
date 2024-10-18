@@ -83,16 +83,17 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
             }
         } else {
             CounterScreen(
-                sets = sets +1,
-                work = work +1,
-                rest = rest +1
+                sets = sets + 1,
+                work = work + 1,
+                rest = rest + 1,
+                volver = { mostrar = true }
             )
         }
     }
 }
 
 @Composable
-fun CounterScreen(sets: Int, work: Int, rest: Int) {
+fun CounterScreen(sets: Int, work: Int, rest: Int, volver: () -> Unit) {
     var fase by remember { mutableStateOf("WORK") }
     var restante by remember { mutableStateOf(work) }
     var setActual by remember { mutableStateOf(sets) }
@@ -172,11 +173,19 @@ fun CounterScreen(sets: Int, work: Int, rest: Int) {
                 Text(text = "Reiniciar", fontSize = 25.sp)
             }
 
+            Button(onClick = { volver() }) {
+                Text(text = "Ajustes", fontSize = 25.sp)
+            }
+
         } else {
             Text(text = "¡Tabata completado!", fontSize = 40.sp)
 
             Button(onClick = { reiniciar() }) {
                 Text(text = "Reiniciar Tábata", fontSize = 25.sp)
+            }
+
+            Button(onClick = { volver() }) {
+                Text(text = "Ajustes", fontSize = 25.sp)
             }
         }
     }
