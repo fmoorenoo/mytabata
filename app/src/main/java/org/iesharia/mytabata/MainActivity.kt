@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.iesharia.mytabata.ui.theme.MytabataTheme
+import org.iesharia.mytabata.CounterDown
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +45,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
         if (mostrar) {
             Text(text = "SETS", fontSize = 30.sp)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Button(onClick = { if (sets > 0) sets-- }) {
+                Button(onClick = { if (sets > 1) sets-- }) {
                     Text(text = "-", fontSize = 25.sp)
                 }
                 Text(text = sets.toString(), fontSize = 30.sp, modifier = Modifier.padding(60.dp, 40.dp))
@@ -55,7 +56,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
 
             Text(text = "WORK", fontSize = 30.sp)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Button(onClick = { if (work > 14) work -= 15 }) {
+                Button(onClick = { if (work > 15) work -= 15 }) {
                     Text(text = "-", fontSize = 25.sp)
                 }
                 Text(text = work.toString(), fontSize = 30.sp, modifier = Modifier.padding(60.dp, 40.dp))
@@ -90,13 +91,18 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun CounterScreen(sets: Int, work: Int, rest: Int) {
+    var restante by remember { mutableStateOf(work) }
+    val counter = remember { CounterDown(work) { restante = it.toInt() } }
+    LaunchedEffect(Unit) {
+        counter.start()
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Tabata iniciado", fontSize = 40.sp)
-
-
+        Text(text = "Tiempo restante: $restante", fontSize = 40.sp)
     }
 }
+
