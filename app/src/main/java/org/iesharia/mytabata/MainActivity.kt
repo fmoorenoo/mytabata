@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.iesharia.mytabata.ui.theme.MytabataTheme
-import org.iesharia.mytabata.CounterDown
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,18 +90,55 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun CounterScreen(sets: Int, work: Int, rest: Int) {
+    var fase by remember { mutableStateOf("WORK") }
     var restante by remember { mutableStateOf(work) }
-    val counter = remember { CounterDown(work) { restante = it.toInt() } }
-    LaunchedEffect(Unit) {
+    var setActual by remember { mutableStateOf(sets) }
+    var funcionando by remember { mutableStateOf(false) }
+
+
+    fun iniciar(seconds: Int, onFinish: () -> Unit) {
+        val counter = CounterDown(seconds) { remainingTime ->
+            restante = remainingTime.toInt()
+            if (remainingTime <= 0) {
+                onFinish()
+            }
+        }
         counter.start()
     }
+
+    fun siguienteFase() {
+        if (fase == "WORK") {
+            fase = "REST"
+            iniciar(rest) {
+                if (setActual > 1) {
+                    setActual--
+                    fase = "WORK"
+                    iniciar(work) { siguienteFase() }
+                } else {
+                    fase = "Finish"
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(funcionando) {
+        if (!funcionando) {
+            funcionando = true
+            iniciar(work) { siguienteFase() }
+        }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Tabata iniciado", fontSize = 40.sp)
-        Text(text = "Tiempo restante: $restante", fontSize = 40.sp)
+        if (fase != "Finish") {
+            Text(text = "Fase: $fase", fontSize = 40.sp)
+            Text(text = "Tiempo restante: $restante", fontSize = 40.sp)
+            Text(text = "Sets restantes: $setActual", fontSize = 40.sp)
+        } else {
+            Text(text = "¡Tabata completado!", fontSize = 40.sp)
+        }
     }
 }
-
