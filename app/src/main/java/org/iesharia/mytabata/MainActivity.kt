@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.iesharia.mytabata.ui.theme.MytabataTheme
+import androidx.compose.ui.graphics.Color
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,15 +98,24 @@ fun CounterScreen(sets: Int, work: Int, rest: Int) {
     var setActual by remember { mutableStateOf(sets) }
     var funcionando by remember { mutableStateOf(false) }
 
+    var counter: CounterDown? by remember { mutableStateOf<CounterDown?>(null) }
 
     fun iniciar(seconds: Int, onFinish: () -> Unit) {
-        val counter = CounterDown(seconds) { tiempoRestante ->
+        counter?.cancel()
+        counter = CounterDown(seconds) { tiempoRestante ->
             restante = tiempoRestante.toInt()
             if (tiempoRestante <= 0) {
                 onFinish()
             }
         }
-        counter.start()
+        counter?.start()
+    }
+
+    fun reiniciar() {
+        funcionando = false
+        fase = "WORK"
+        restante = work
+        setActual = sets
     }
 
     fun siguienteFase() {
@@ -138,17 +150,34 @@ fun CounterScreen(sets: Int, work: Int, rest: Int) {
         }
     }
 
+    val backgroundColor = when (fase) {
+        "WORK" -> Color(0xFF00E676)
+        "REST" -> Color(0xFF2196F3)
+        else -> Color(0xFFFF8080)
+    }
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (fase != "Finish") {
-            Text(text = "Fase: $fase", fontSize = 40.sp)
-            Text(text = "Tiempo restante: $restante", fontSize = 40.sp)
+            Text(text = fase, fontSize = 40.sp)
             Text(text = "Sets restantes: $setActual", fontSize = 40.sp)
+            Text(text = "$restante", fontSize = 100.sp)
+
+            Button(onClick = { reiniciar() }) {
+                Text(text = "Reiniciar", fontSize = 25.sp)
+            }
+
         } else {
             Text(text = "¡Tabata completado!", fontSize = 40.sp)
+
+            Button(onClick = { reiniciar() }) {
+                Text(text = "Reiniciar Tábata", fontSize = 25.sp)
+            }
         }
     }
 }
