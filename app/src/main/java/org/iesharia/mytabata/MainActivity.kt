@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ConfigScreen(modifier: Modifier = Modifier) {
     var mostrar by remember { mutableStateOf(true) }
-    var sets by remember { mutableStateOf(6) }
+    var sets by remember { mutableStateOf(3) }
     var work by remember { mutableStateOf(60) }
     var rest by remember { mutableStateOf(15) }
 
@@ -97,9 +97,9 @@ fun CounterScreen(sets: Int, work: Int, rest: Int) {
 
 
     fun iniciar(seconds: Int, onFinish: () -> Unit) {
-        val counter = CounterDown(seconds) { remainingTime ->
-            restante = remainingTime.toInt()
-            if (remainingTime <= 0) {
+        val counter = CounterDown(seconds) { tiempoRestante ->
+            restante = tiempoRestante.toInt()
+            if (tiempoRestante <= 0) {
                 onFinish()
             }
         }
@@ -109,7 +109,17 @@ fun CounterScreen(sets: Int, work: Int, rest: Int) {
     fun siguienteFase() {
         if (fase == "WORK") {
             fase = "REST"
-            iniciar(rest) {
+            if (rest > 0) {
+                iniciar(rest) {
+                    if (setActual > 1) {
+                        setActual--
+                        fase = "WORK"
+                        iniciar(work) { siguienteFase() }
+                    } else {
+                        fase = "Finish"
+                    }
+                }
+            } else {
                 if (setActual > 1) {
                     setActual--
                     fase = "WORK"
