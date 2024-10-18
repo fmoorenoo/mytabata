@@ -12,18 +12,6 @@ class CounterDown(var segundos: Int, var loquehacealhacertick: (Long) -> Unit) {
         }
         override fun onFinish() {
             counterState = false
-            Log.i("dam2", "mensajito")
-        }
-    }
-
-    fun toggle() {
-        Log.i("dam2", "toggle: $counterState")
-        if (this.counterState){
-            this.cancel()
-
-        } else {
-            Log.i("dam2", "toggle: start")
-            this.start()
         }
     }
 
