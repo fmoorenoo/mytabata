@@ -37,7 +37,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
     var mostrar by remember { mutableStateOf(true) }
     var sets by remember { mutableStateOf(3) }
     var work by remember { mutableStateOf(60) }
-    var rest by remember { mutableStateOf(15) }
+    var rest by remember { mutableStateOf(10) }
 
     Column(
         modifier = modifier
@@ -72,11 +72,11 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
 
             Text(text = "REST", fontSize = 30.sp)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Button(onClick = { if (rest > 14) rest -= 15 }) {
+                Button(onClick = { if (rest > 10) rest -= 10 }) {
                     Text(text = "-", fontSize = 25.sp)
                 }
                 Text(text = rest.toString(), fontSize = 30.sp, modifier = Modifier.padding(60.dp, 40.dp))
-                Button(onClick = { rest += 15 }) {
+                Button(onClick = { rest += 10 }) {
                     Text(text = "+", fontSize = 25.sp)
                 }
             }
@@ -86,7 +86,7 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
             }
         } else {
             CounterScreen(
-                sets = sets + 1,
+                sets = sets,
                 work = work + 1,
                 rest = rest + 1,
                 volver = { mostrar = true }
@@ -125,17 +125,7 @@ fun CounterScreen(sets: Int, work: Int, rest: Int, volver: () -> Unit) {
     fun siguienteFase() {
         if (fase == "WORK") {
             fase = "REST"
-            if (rest > 0) {
-                iniciar(rest) {
-                    if (setActual > 1) {
-                        setActual--
-                        fase = "WORK"
-                        iniciar(work) { siguienteFase() }
-                    } else {
-                        fase = "Finish"
-                    }
-                }
-            } else {
+            iniciar(rest) {
                 if (setActual > 1) {
                     setActual--
                     fase = "WORK"
