@@ -40,9 +40,12 @@ fun ConfigScreen(modifier: Modifier = Modifier) {
     var rest by remember { mutableStateOf(15) }
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color(0xFFe1dd60)),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
         if (mostrar) {
             Text(text = "SETS", fontSize = 30.sp)
